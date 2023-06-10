@@ -1,4 +1,4 @@
-package com.tareq23.rolebaseauth;
+package com.tareq23.configure;
 
 
 
@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @EnableWebSecurity
@@ -20,20 +21,12 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter{
 	
 	
 	@Autowired
-	DataSource dataSource;
+	UserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-		auth.jdbcAuthentication()
-			.dataSource(dataSource)
-			.withDefaultSchema()
-			.withUser(
-						User.withUsername("admin").password("admin").roles("ADMIN")
-					)
-			.withUser(
-						User.withUsername("user").password("user").roles("USER")
-					);
+		
+		auth.userDetailsService(userDetailsService);
 	}
 	
 	@Bean
